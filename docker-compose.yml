@@ -1,16 +1,17 @@
 version: "3.7"
+
 services:
   app:
     build:
+      context: ./
+      dockerfile: Dockerfile
       args:
         user: talha
         uid: 1000
-      context: ./
-      dockerfile: Dockerfile
     image: carnelianist
     container_name: carnelianist-app
     restart: unless-stopped
-    working_dir: /var/www/
+    working_dir: /var/www
     volumes:
       - ./:/var/www
     networks:
@@ -21,9 +22,9 @@ services:
     container_name: carnelianist-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE:-your_db_name} # Fallback to a default name
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-your_root_password} # Fallback to a default password
+      MYSQL_PASSWORD: ${DB_PASSWORD:-your_password} # Fallback to a default password
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     command: ["--default-authentication-plugin=mysql_native_password"]
